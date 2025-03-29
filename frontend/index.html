@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewHigher - AI-Powered Job Search</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: url('static/assets/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            max-width: 650px;
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        /* Logo Styling */
+        .logo {
+            width: 220px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        /* Updated Mission Statement Styling */
+        .mission-box {
+            background: 
+            #e7f1f7; /* Matches Find Jobs button */
+            color: black;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Updated "Find Your Dream Job" to match Find Jobs button */
+        .main-heading {
+            color: #0056b3; /* Same as Find Jobs button */
+            font-weight: bold;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-select, .form-control {
+            margin-bottom: 15px;
+        }
+
+        #resume-label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #0056b3;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #003d80;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo -->
+        <img src="static/assets/vhlogo.png" alt="ViewHigher Logo" class="logo">
+
+        <!-- Updated Mission Statement -->
+        <div class="mission-box">
+            <h3>Welcome to ViewHigher!</h3>
+            <p>At ViewHigher, we leverage the power of AI to analyze your resume and match you with job opportunities that align with your skills and experience.  
+            Our mission is to connect talented individuals with the right careers, ensuring a perfect fit between your potential and the industry’s needs.</p>
+        </div>
+
+        <!-- Updated "Find Your Dream Job" -->
+        <h2 class="main-heading">Find Your Dream Job</h2>
+        
+        <!-- Resume Upload -->
+        <label for="resumeUpload" class="form-label">Attach Your Resume</label>
+        <input type="file" class="form-control" id="resumeUpload" accept=".pdf">
+        <p id="resume-label" class="text-muted">No file chosen</p>
+
+        <!-- Submit Button -->
+        <button class="btn btn-primary w-100 mt-3" onclick="submitForm()">Find Jobs</button>
+
+    </div>
+
+    <script>
+        let uploadedResume = null;
+
+
+        document.getElementById("resumeUpload").addEventListener("change", function(event) {
+            uploadedResume = event.target.files[0];
+            document.getElementById("resume-label").textContent = uploadedResume ? uploadedResume.name : "No file chosen";
+        });
+
+        function submitForm() {
+            if (!uploadedResume) {
+                alert("Please upload a resume.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("resume", uploadedResume);
+
+            fetch("http://127.0.0.1:5000/upload-resume", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("responseMessage").textContent = "✅ " + data.message;
+                console.log("Resume Filename:", data.resumeFile);
+            })
+            .catch(error => {
+                console.error("🔴 Error:", error);
+                document.getElementById("responseMessage").textContent = "❌ Error submitting data.";
+            });
+        }
+    </script>
+
+</body>
+</html>
