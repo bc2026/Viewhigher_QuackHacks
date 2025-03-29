@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ViewHigher - AI-Powered Job Search</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Rubik+Moonrocks&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      background: #160029;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: -2;
+    }
+
+    body:hover::before {
+      animation: pulseGrid 2s ease-in-out infinite;
+    }
+    }
+
+    @keyframes pulseGrid {
+      0%, 100% {
+        opacity: 0.8;
+        background-size: 58px 58px;
+      }
+      50% {
+        opacity: 1;
+        background-size: 62px 62px;
+      }
+    }
+
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+      background-repeat: repeat;
+      opacity: 0.08;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .hover-spot {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(120px);
+      transition: background 0.1s ease;
+      mix-blend-mode: screen;
+    }
+
+    .logo-text {
+      font-family: 'Rubik Moonrocks', cursive;
+      font-size: 56px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 12px rgba(255, 255, 255, 0.2);
+      z-index: 1;
+    }
+
+    .card {
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      background-color: #ffffff;
+      max-width: 500px;
+      width: 100%;
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+    }
+
+    .form-control {
+      margin-bottom: 16px;
+      border-radius: 8px;
+    }
+
+    .btn-primary {
+      background-color: #5e35b1;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+    }
+
+    .btn-primary:hover {
+      background-color: #4527a0;
+    }
+
+    #responseMessage {
+      margin-top: 20px;
+      font-weight: 500;
+      color: #28a745;
+    }
+
+    .text-muted {
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="hover-spot" id="hoverSpot"></div>
+  <div class="logo-text">ViewHigher</div>
+
+  <div class="card">
+    <h2>Upload Your Resume</h2>
+    <input type="file" class="form-control" id="resumeUpload" accept=".pdf" />
+    <p id="resume-label" class="text-muted">No file chosen</p>
+    <button class="btn btn-primary w-100" onclick="submitForm()">Find Jobs</button>
+    <div id="responseMessage"></div>
+  </div>
+
+  <script>
+    let uploadedResume = null;
+
+    document.getElementById("resumeUpload").addEventListener("change", function (event) {
+      uploadedResume = event.target.files[0];
+      document.getElementById("resume-label").textContent = uploadedResume ? uploadedResume.name : "No file chosen";
+    });
+
+    function submitForm() {
+      if (!uploadedResume) {
+        alert("Please upload a resume.");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("resume", uploadedResume);
+
+      fetch("http://127.0.0.1:5000/upload-resume", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("responseMessage").textContent = "✅ " + data.message;
+          console.log("Resume Filename:", data.resumeFile);
+        })
+        .catch((error) => {
+          console.error("🔴 Error:", error);
+          document.getElementById("responseMessage").textContent = "❌ Error submitting data.";
+        });
+    }
+
+    const hoverSpot = document.getElementById("hoverSpot");
+    document.addEventListener("mousemove", (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      hoverSpot.style.left = `${x - 400}px`;
+      hoverSpot.style.top = `${y - 400}px`;
+    });
+  </script>
+</body>
+</html>
