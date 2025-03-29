@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ViewHigher - Your AI Career Assistant</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Rubik+Moonrocks&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      position: relative;
+      background: #160029;
+      color: white;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+      background-repeat: repeat;
+      opacity: 0.08;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .hover-spot {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(120px);
+      mix-blend-mode: screen;
+    }
+
+    .logo-text {
+      font-family: 'Rubik Moonrocks', cursive;
+      font-size: 48px;
+      text-align: center;
+      margin-top: 20px;
+      color: #fff;
+      text-shadow: 2px 2px 12px rgba(255, 255, 255, 0.15);
+    }
+
+    .chat-container {
+      margin-top: 20px;
+      margin-bottom: 30px;
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      max-width: 700px;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .chat-box {
+      background: #1f0038;
+      padding: 15px;
+      border-radius: 10px;
+      height: 300px;
+      overflow-y: auto;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      border-radius: 8px;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .chat-input button {
+      background-color: #5e35b1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 600;
+    }
+
+    .chat-input button:hover {
+      background-color: #4527a0;
+    }
+  </style>
+</head>
+<body>
+  <div class="hover-spot" id="hoverSpot"></div>
+  <div class="logo-text">ViewHigher</div>
+
+  <div class="chat-container">
+    <div class="chat-box" id="chatBox">
+      <!-- Chat messages will appear here -->
+    </div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Ask ViewHigher anything about your job search..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const hoverSpot = document.getElementById("hoverSpot");
+    document.addEventListener("mousemove", (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      hoverSpot.style.left = `${x - 400}px`;
+      hoverSpot.style.top = `${y - 400}px`;
+    });
+
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const message = input.value.trim();
+      if (!message) return;
+
+      const chatBox = document.getElementById("chatBox");
+      const userBubble = document.createElement("div");
+      userBubble.textContent = `You: ${message}`;
+      chatBox.appendChild(userBubble);
+
+      // Scroll to bottom
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      input.value = "";
+
+      // Simulate bot response for now
+      const botBubble = document.createElement("div");
+      botBubble.textContent = "ViewHigher: (loading response...)";
+      chatBox.appendChild(botBubble);
+
+      // TODO: Replace with real LLM backend call
+      setTimeout(() => {
+        botBubble.textContent = "ViewHigher: Here's a helpful response based on your resume and goals!";
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
