@@ -1,0 +1,40 @@
+{
+  "resume_industry_context": "{context}",
+
+  "name": "{first_name last_name}",
+
+  "email":  "{email}",
+
+  "education": {
+    "institution": "{university/college}",
+    "graduation": "{graduation_month graduation_year",
+    "degree": "{major}"},
+
+"awards": [
+      "{award1}",
+      "{award2}",
+      "{award3}"
+    ],
+
+    "tools_and_frameworks": [
+      {item1}, {item2}, ...
+    ],
+
+  "professional_experience": [
+    {
+      "role": "{role1}",
+      "organization": "{organization1}",
+      "location": "{location1}",
+    },
+    {
+      "role": "{role2}",
+      "organization": "{organization2}",
+      "location": "{location2}",
+    },
+    {
+      "role": "{role3}",
+      "organization": "{organization3}",
+      "location": "{location3}",
+    }]
+ }
+

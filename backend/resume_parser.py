@@ -64,8 +64,18 @@ annotations = response.output[1].content[0].annotations
 # Get top-k retrieved filenames
 retrieved_files = set([result.filename for result in annotations])
 
-print(f'Files used: {retrieved_files}')
-print('Response:')
-print(response.output[1].content[0].text) # 0 being the filesearch call
+# print(f'Files used: {retrieved_files}')
+# print('Response:')
+# print(response.output[1].content[0].text) # 0 being the filesearch call
+
+json_summary = response.output[1].content[0].text
+json_summary = json_summary.replace('```json', "")
+json_summary = json_summary.replace('```', "")
+
+json_summary_file_name = file_name.replace('.pdf', "") + ".json"
+
+
+json_summary_file = open(json_summary_file_name, "w")
+json_summary_file.write(json_summary)
 
 
